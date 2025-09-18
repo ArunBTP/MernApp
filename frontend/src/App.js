@@ -11,7 +11,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/api/enquiry', { name, email });
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/enquiry`, { name, email });
       setMessage('✅ Enquiry submitted successfully!');
       setName('');
       setEmail('');
