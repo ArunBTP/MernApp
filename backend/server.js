@@ -1,4 +1,6 @@
 // server.js
+const cors = require('cors');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const enquiryRoutes = require('./routes/enquiry');
@@ -6,8 +8,15 @@ require('dotenv').config();
 
 const app = express();
 
+
 // Middleware
 app.use(express.json());
+
+app.use(cors({
+  origin: 'https://mern-app-iota-beryl.vercel.app',
+  methods: ['GET', 'POST'],
+  credentials: true
+}));
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGO_URI, {
