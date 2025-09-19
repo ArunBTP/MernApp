@@ -1,24 +1,28 @@
-// server.js
-const cors = require('cors');
-
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const enquiryRoutes = require('./routes/enquiry');
+const authRoutes = require('./routes/auth');
 require('dotenv').config();
 
 const app = express();
 
-
-// Middleware
+// ✅ Middleware: JSON parser
 app.use(express.json());
 
+// ✅ CORS configuration
+const allowedOrigins = [
+  'http://localhost:3000', // local dev
+  'https://mern-app-iota-beryl.vercel.app' // deployed frontend
+];
+
 app.use(cors({
-  origin: 'https://mern-app-iota-beryl.vercel.app',
+  origin: allowedOrigins,
   methods: ['GET', 'POST'],
   credentials: true
 }));
 
-// MongoDB Connection
+// ✅ MongoDB connection
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -26,10 +30,12 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log('MongoDB connected'))
 .catch((err) => console.error('MongoDB connection error:', err));
 
-// Routes
+// ✅ Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/enquiry', enquiryRoutes);
 
-// Start Server
+
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
